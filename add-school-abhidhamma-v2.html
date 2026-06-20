@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YMBA Abhidhamma Study App — ADD School Heathrow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;1,400&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css">
+<style>
+:root {
+  --amber: #B8860B;
+  --amber-light: #D4A017;
+  --amber-pale: #FDF3DC;
+  --teal: #1D6A5C;
+  --teal-light: #2A8C78;
+  --teal-pale: #E8F4F1;
+  --ivory: #FAF7F0;
+  --warm-dark: #2C2416;
+  --warm-mid: #5A4A35;
+  --warm-muted: #8C7B66;
+  --sage: #E8F0EB;
+  --border: #E0D5C5;
+  --white: #FFFFFF;
+  --shadow: 0 2px 12px rgba(44,36,22,0.08);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background: var(--ivory);
+  color: var(--warm-dark);
+  min-height: 100vh;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* HEADER */
+header {
+  background: var(--teal);
+  color: white;
+  padding: 1.25rem 1.5rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(29,106,92,0.3);
+}
+.header-inner {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.dhamma-wheel {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .dhamma-wheel { animation: none; } }
+.header-text h1 {
+  font-family: 'Noto Serif', serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.2;
+}
+.header-text p {
+  font-size: 12px;
+  opacity: .8;
+  margin-top: 2px;
+}
+.level-pill {
+  margin-left: auto;
+  background: rgba(255,255,255,.15);
+  border: 1px solid rgba(255,255,255,.3);
+  color: white;
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 99px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Noto Sans', sans-serif;
+  transition: background .15s;
+}
+.level-pill:hover { background: rgba(255,255,255,.25); }
+
+/* MAIN */
+main {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* WELCOME */
+.welcome-intro {
+  text-align: center;
+  padding: 2rem 0 1.5rem;
+}
+.welcome-intro .lotus { font-size: 32px; margin-bottom: .5rem; }
+.welcome-intro h2 {
+  font-family: 'Noto Serif', serif;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--teal);
+  margin-bottom: .5rem;
+}
+.welcome-intro p {
+  color: var(--warm-muted);
+  font-size: 14px;
+  max-width: 420px;
+  margin: 0 auto .75rem;
+}
+.source-badges {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+}
+.badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  border: 1px solid var(--border);
+  color: var(--warm-muted);
+  background: white;
+}
+.badge.amber { border-color: var(--amber-light); color: var(--amber); background: var(--amber-pale); }
+.badge.teal { border-color: var(--teal-light); color: var(--teal); background: var(--teal-pale); }
+
+.levels-grid { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+.level-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-family: 'Noto Sans', sans-serif;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.level-card:hover { border-color: var(--teal); box-shadow: var(--shadow); background: var(--teal-pale); }
+.level-card .lnum {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--amber-pale); border: 1px solid var(--amber-light);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; color: var(--amber); flex-shrink: 0;
+}
+.level-card .linfo { flex: 1; }
+.level-card .lname { font-size: 15px; font-weight: 600; color: var(--warm-dark); display: block; }
+.level-card .ldesc { font-size: 12px; color: var(--warm-muted); margin-top: 2px; }
+.level-card .ltime { font-size: 11px; color: var(--teal); margin-top: 3px; }
+.level-card .larrow { color: var(--warm-muted); font-size: 18px; }
+
+.footer-note { text-align: center; font-size: 12px; color: var(--warm-muted); }
+.footer-note a { color: var(--teal); text-decoration: none; }
+
+/* MENU */
+.menu-header {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.menu-header h2 {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px; font-weight: 600; color: var(--teal);
+}
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 1.5rem;
+}
+.mode-card {
+  background: white;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 10px;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Noto Sans', sans-serif;
+  transition: all .15s;
+}
+.mode-card:hover { border-color: var(--amber); background: var(--amber-pale); }
+.mode-card .micon { font-size: 22px; color: var(--teal); margin-bottom: 6px; display: block; }
+.mode-card .mname { font-size: 13px; font-weight: 500; color: var(--warm-dark); display: block; }
+
+/* NOTES */
+.section-header { font-size: 11px; font-weight: 600; color: var(--warm-muted); letter-spacing: .06em; text-transform: uppercase; padding: 12px 0 6px; }
+.note-btn {
+  display: block; width: 100%;
+  padding: 10px 12px 10px 16px;
+  margin-bottom: 5px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 8px 8px 0;
+  background: white;
+  cursor: pointer;
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 13px; color: var(--warm-mid);
+  text-align: left; transition: all .15s;
+}
+.note-btn:hover { background: var(--amber-pale); border-color: var(--amber-light); border-left-color: var(--amber); color: var(--warm-dark); }
+.note-btn.video { border-left-color: var(--teal); color: var(--teal-light); }
+.note-btn.video:hover { background: var(--teal-pale); }
+.paper-item { font-size: 12px; color: var(--warm-muted); padding: 4px 0 4px 16px; display: flex; align-items: center; gap: 6px; }
+.paper-item::before { content: '☸'; font-size: 10px; color: var(--amber); }
+
+/* TOPICS */
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+.topic-btn {
+  background: white; border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 16px 10px;
+  cursor: pointer; text-align: center;
+  font-family: 'Noto Sans', sans-serif; transition: all .15s;
+}
+.topic-btn:hover { border-color: var(--teal); background: var(--teal-pale); }
+.topic-btn .ticon { font-size: 20px; color: var(--amber); margin-bottom: 6px; display: block; }
+.topic-btn .tname { font-size: 12px; font-weight: 500; color: var(--warm-dark); display: block; line-height: 1.3; }
+
+/* TUTOR */
+.chat-box {
+  background: white; border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; margin-bottom: 1rem;
+}
+.chat-msgs {
+  min-height: 200px; max-height: 380px; overflow-y: auto;
+  padding: 1rem; display: flex; flex-direction: column; gap: 10px;
+}
+.msg { padding: 10px 14px; border-radius: 10px; font-size: 14px; line-height: 1.6; max-width: 88%; }
+.msg-ai { background: var(--sage); color: var(--warm-dark); align-self: flex-start; }
+.msg-user { background: var(--teal); color: white; align-self: flex-end; }
+.chat-input {
+  display: flex; gap: 0; border-top: 1px solid var(--border);
+}
+.chat-input input {
+  flex: 1; padding: 12px 14px; border: none; outline: none;
+  font-size: 14px; font-family: 'Noto Sans', sans-serif;
+  background: white; color: var(--warm-dark);
+}
+.chat-input input::placeholder { color: var(--warm-muted); }
+.send-btn {
+  padding: 12px 16px; background: var(--teal); color: white;
+  border: none; cursor: pointer; font-size: 18px; transition: background .15s;
+}
+.send-btn:hover { background: var(--teal-light); }
+.quick-qs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+.q-pill {
+  padding: 5px 12px; background: white; border: 1px solid var(--border);
+  border-radius: 99px; font-size: 12px; color: var(--warm-mid);
+  cursor: pointer; font-family: 'Noto Sans', sans-serif; transition: all .15s;
+}
+.q-pill:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-pale); }
+
+/* QUIZ */
+.quiz-card {
+  background: white; border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.25rem; margin-bottom: 1rem;
+}
+.quiz-src { font-size: 11px; color: var(--warm-muted); font-style: italic; margin-bottom: .75rem; }
+.quiz-q { font-family: 'Noto Serif', serif; font-size: 16px; font-weight: 600; color: var(--warm-dark); margin-bottom: 1rem; line-height: 1.5; }
+.quiz-opts { display: flex; flex-direction: column; gap: 8px; margin-bottom: .75rem; }
+.quiz-opt {
+  padding: 10px 14px; border: 1.5px solid var(--border); border-radius: 8px;
+  background: white; cursor: pointer; font-size: 14px; text-align: left;
+  font-family: 'Noto Sans', sans-serif; color: var(--warm-dark); transition: all .15s;
+}
+.quiz-opt:hover:not(:disabled) { border-color: var(--teal); background: var(--teal-pale); }
+.quiz-opt.correct { background: #EAF4EF; border-color: #2A8C78; color: #1D6A5C; }
+.quiz-opt.wrong { background: #FEF0F0; border-color: #D94040; color: #A32828; }
+.quiz-fb { font-size: 13px; margin-top: .5rem; line-height: 1.6; padding: 8px 12px; border-radius: 8px; }
+.quiz-fb.correct { background: #EAF4EF; color: #1D6A5C; }
+.quiz-fb.wrong { background: #FEF0F0; color: #A32828; }
+.score-bar {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 1rem; font-size: 13px; color: var(--warm-muted);
+}
+.score-badge {
+  margin-left: auto; background: var(--amber-pale); border: 1px solid var(--amber-light);
+  color: var(--amber); font-size: 13px; padding: 3px 12px; border-radius: 99px; font-weight: 500;
+}
+
+/* FLASHCARDS */
+.flashcard {
+  background: white; border: 1.5px solid var(--border); border-radius: 16px;
+  min-height: 180px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; padding: 2rem; text-align: center; margin-bottom: 1rem;
+  transition: box-shadow .15s;
+}
+.flashcard:hover { box-shadow: var(--shadow); }
+.fc-front { font-family: 'Noto Serif', serif; font-size: 18px; font-weight: 600; color: var(--teal); line-height: 1.4; }
+.fc-back { font-size: 14px; color: var(--warm-mid); line-height: 1.7; display: none; }
+.flashcard.flipped .fc-front { display: none; }
+.flashcard.flipped .fc-back { display: block; }
+.fc-hint { text-align: center; font-size: 12px; color: var(--warm-muted); margin-bottom: 1rem; }
+.fc-nav { display: flex; gap: 8px; justify-content: center; }
+
+/* PAPERS */
+.paper-card {
+  background: white; border: 1px solid var(--border); border-radius: 12px;
+  padding: 12px 16px; margin-bottom: 8px; cursor: pointer;
+  display: flex; align-items: center; gap: 10px; transition: all .15s;
+}
+.paper-card:hover { border-color: var(--teal); background: var(--teal-pale); }
+.paper-card .pname { font-size: 14px; font-weight: 500; color: var(--warm-dark); }
+.paper-card .pyear { font-size: 12px; color: var(--warm-muted); }
+.pq { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; line-height: 1.6; color: var(--warm-mid); }
+.pq:last-child { border-bottom: none; }
+.practise-btns { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 1rem; }
+
+/* EXPLAIN */
+.explain-body p { font-size: 15px; line-height: 1.8; color: var(--warm-mid); margin-bottom: 1rem; }
+
+/* SHARED */
+.page-title {
+  font-family: 'Noto Serif', serif;
+  font-size: 20px; font-weight: 600; color: var(--teal);
+  margin-bottom: 1rem; padding-bottom: .75rem;
+  border-bottom: 1px solid var(--border);
+}
+.back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; color: var(--teal); cursor: pointer;
+  margin-bottom: 1.25rem; background: none; border: none;
+  font-family: 'Noto Sans', sans-serif; padding: 0;
+}
+.back-btn:hover { text-decoration: underline; }
+.btn {
+  display: inline-block; padding: 8px 18px;
+  border: 1.5px solid var(--border); border-radius: 8px;
+  background: white; cursor: pointer; font-size: 14px;
+  font-family: 'Noto Sans', sans-serif; color: var(--warm-dark);
+  transition: all .15s; text-decoration: none;
+}
+.btn:hover { border-color: var(--warm-muted); background: var(--sage); }
+.btn-teal { background: var(--teal); color: white; border-color: var(--teal); }
+.btn-teal:hover { background: var(--teal-light); }
+.btn-amber { background: var(--amber); color: white; border-color: var(--amber); }
+.btn-amber:hover { background: var(--amber-light); }
+.btn-sm { padding: 5px 12px; font-size: 13px; }
+.dots::after { content: '...'; animation: dk 1.2s steps(3,end) infinite; }
+@keyframes dk { 0%,20%{content:'.'} 40%{content:'..'} 60%,100%{content:'...'} }
+.loading-wrap { padding: 2rem; text-align: center; color: var(--warm-muted); font-size: 14px; }
+.etag {
+  font-size: 11px; padding: 2px 8px; border-radius: 99px;
+  background: var(--teal-pale); color: var(--teal); margin-left: 6px;
+}
+@media (max-width: 480px) {
+  .mode-grid { grid-template-columns: repeat(2, 1fr); }
+  .topic-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <svg class="dhamma-wheel" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+      <circle cx="50" cy="50" r="8" fill="rgba(255,255,255,0.9)"/>
+      <circle cx="50" cy="50" r="4" fill="#D4A017"/>
+      <!-- 8 spokes -->
+      <line x1="50" y1="50" x2="50" y2="8" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="85" y2="23" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="92" y2="50" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="85" y2="77" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="50" y2="92" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="15" y2="77" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="8" y2="50" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <line x1="50" y1="50" x2="15" y2="23" stroke="rgba(255,255,255,0.85)" stroke-width="2.5" stroke-linecap="round"/>
+      <!-- rim knobs -->
+      <circle cx="50" cy="8" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="85" cy="23" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="92" cy="50" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="85" cy="77" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="50" cy="92" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="15" cy="77" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="8" cy="50" r="4" fill="rgba(255,255,255,0.7)"/>
+      <circle cx="15" cy="23" r="4" fill="rgba(255,255,255,0.7)"/>
+    </svg>
+    <div class="header-text">
+      <h1>Athula Dassana Dhamma School</h1>
+      <p>YMBA Abhidhamma Study App · Heathrow</p>
+    </div>
+    <button class="level-pill" id="level-pill" onclick="show('sw')" style="display:none;">Change level</button>
+  </div>
+</header>
+
+<main>
+
+<!-- WELCOME -->
+<div id="sw" class="screen active">
+  <div class="welcome-intro">
+    <div class="lotus">🪷</div>
+    <h2>Sādhu! Welcome to your study app</h2>
+    <p>Built on ADD School class notes, your uploaded textbooks, and real YMBA past papers 2019–2025.</p>
+    <div class="source-badges">
+      <span class="badge amber">Fundamental Abhidhamma — Dr. Nandamālābhivaṃsa</span>
+      <span class="badge amber">Abhidhammattha Saṅgaha — Nārada Mahā Thera</span>
+      <span class="badge teal">YMBA Past Papers 2019–2025</span>
+      <span class="badge teal">addschool.org class notes</span>
+    </div>
+  </div>
+
+  <div class="levels-grid">
+    <button class="level-card" onclick="go('jp1','Junior Part I')"><div class="lnum">JP1</div><div class="linfo"><span class="lname">Junior Part I</span><span class="ldesc">Tripitaka · 31 Planes · 89 Cittas · Akusala / Ahetuka / Sobhana / Lokuttara</span><span class="ltime">☸ Dhamma 1h30 + Abhidhamma 1h30 · Papers 2022–2024</span></div><i class="ti ti-chevron-right larrow" aria-hidden="true"></i></button>
+    <button class="level-card" onclick="go('jp2','Junior Part II')"><div class="lnum">JP2</div><div class="linfo"><span class="lname">Junior Part II</span><span class="ldesc">52 Cetasikas · Saṅgahanaya · Sampayoganaya · Nibbāna</span><span class="ltime">☸ Dhamma 1h30 + Abhidhamma 1h30 · Papers 2022–2024</span></div><i class="ti ti-chevron-right larrow" aria-hidden="true"></i></button>
+    <button class="level-card" onclick="go('sp1','Senior Part I')"><div class="lnum">SP1</div><div class="linfo"><span class="lname">Senior Part I</span><span class="ldesc">28 Rūpa · Vedanā / Hetu / Kicca · Rūpa Samutthāna · Rūpa Kalāpa</span><span class="ltime">☸ Dhamma 2h + Abhidhamma 2h · Papers 2022–2024</span></div><i class="ti ti-chevron-right larrow" aria-hidden="true"></i></button>
+    <button class="level-card" onclick="go('sp2','Senior Part II')"><div class="lnum">SP2</div><div class="linfo"><span class="lname">Senior Part II</span><span class="ldesc">12 notes: Doors · Vīthi · Javana · Bhūmi/Puggala Bheda · Vīthimutta · Death Vīthi</span><span class="ltime">☸ Dhamma 2h + Abhidhamma 2h · Papers 2022–2024</span></div><i class="ti ti-chevron-right larrow" aria-hidden="true"></i></button>
+    <button class="level-card" onclick="go('diploma','Diploma')"><div class="lnum">DIP</div><div class="linfo"><span class="lname">Diploma</span><span class="ldesc">Paṭṭhāna · Kamma · Kilesa · Paticcasamuppāda · Bodhipakkhiya</span><span class="ltime">☸ Dhamma 3h + Abhidhamma 3h · Papers 2022–2025</span></div><i class="ti ti-chevron-right larrow" aria-hidden="true"></i></button>
+    <button class="level-card" onclick="go('adv','Advanced Diploma')"><div class="lnum">ADV</div><div class="linfo"><span class="lname">Advanced Diploma</span><span class="ldesc">Vibhaṅga · Dhātukathā · Paṭṭhāna in depth · Puggalapaññatti</span><span class="ltime">☸ Dhamma 3h + Abhidhamma 3h · Papers 2022 & 2025</span></div><i class="ti ti-chevron-right larrow" aria-hidden="true"></i></button>
+  </div>
+  <p class="footer-note">Guided by Venerable Wanduramba Kassapa Thero · <a href="https://addschool.org" target="_blank">addschool.org</a> · Free for all students</p>
+</div>
+
+<!-- MENU -->
+<div id="sm" class="screen">
+  <div class="menu-header">
+    <div>
+      <h2 id="menu-title">Junior Part I</h2>
+      <p style="font-size:13px;color:var(--warm-muted);">Choose a study mode</p>
+    </div>
+  </div>
+  <div class="mode-grid">
+    <button class="mode-card" onclick="startTutor()"><span class="micon"><i class="ti ti-message-circle" aria-hidden="true"></i></span><span class="mname">Ask tutor</span></button>
+    <button class="mode-card" onclick="show('sn')"><span class="micon"><i class="ti ti-notes" aria-hidden="true"></i></span><span class="mname">Class notes</span></button>
+    <button class="mode-card" onclick="show('st')"><span class="micon"><i class="ti ti-book" aria-hidden="true"></i></span><span class="mname">Topics</span></button>
+    <button class="mode-card" onclick="startQuiz()"><span class="micon"><i class="ti ti-help-circle" aria-hidden="true"></i></span><span class="mname">Quiz</span></button>
+    <button class="mode-card" onclick="startFlash()"><span class="micon"><i class="ti ti-cards" aria-hidden="true"></i></span><span class="mname">Flashcards</span></button>
+    <button class="mode-card" onclick="show('sp')"><span class="micon"><i class="ti ti-file-text" aria-hidden="true"></i></span><span class="mname">Past papers</span></button>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div id="sn" class="screen">
+  <button class="back-btn" onclick="show('sm')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Menu</button>
+  <h2 class="page-title">Class notes <span class="etag" id="sn-tag"></span></h2>
+  <div id="nlist"></div>
+</div>
+
+<!-- TOPICS -->
+<div id="st" class="screen">
+  <button class="back-btn" onclick="show('sm')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Menu</button>
+  <h2 class="page-title">Explore topics</h2>
+  <div class="topic-grid" id="tgrid"></div>
+</div>
+
+<!-- TUTOR -->
+<div id="sc" class="screen">
+  <button class="back-btn" onclick="show('sm')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Menu</button>
+  <h2 class="page-title">Ask the tutor</h2>
+  <div class="chat-box">
+    <div class="chat-msgs" id="msgs"></div>
+    <div class="chat-input">
+      <input type="text" id="cin" placeholder="Ask anything about Abhidhamma..." onkeydown="if(event.key==='Enter')send()"/>
+      <button class="send-btn" onclick="send()" aria-label="Send"><i class="ti ti-send" aria-hidden="true"></i></button>
+    </div>
+  </div>
+  <div class="quick-qs" id="qqs"></div>
+</div>
+
+<!-- QUIZ -->
+<div id="sq" class="screen">
+  <button class="back-btn" onclick="show('sm')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Menu</button>
+  <h2 class="page-title">Quiz</h2>
+  <div class="score-bar">
+    <span id="qprog" style="font-size:13px;">Question 1</span>
+    <span class="score-badge" id="qsc">Score: 0</span>
+  </div>
+  <div class="quiz-card" id="qcard" style="display:none;">
+    <p class="quiz-src" id="qsrc"></p>
+    <p class="quiz-q" id="qq"></p>
+    <div class="quiz-opts" id="qopts"></div>
+    <div class="quiz-fb" id="qfb" style="display:none;"></div>
+    <button class="btn btn-teal btn-sm" id="qnext" style="display:none;margin-top:.75rem;" onclick="nextQ()">Next question →</button>
+  </div>
+  <div class="loading-wrap" id="qload" style="display:none;"><span class="dots">Generating question</span></div>
+</div>
+
+<!-- FLASHCARDS -->
+<div id="sf" class="screen">
+  <button class="back-btn" onclick="show('sm')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Menu</button>
+  <h2 class="page-title">Flashcards <span class="etag" id="fprog"></span></h2>
+  <div class="flashcard" id="fcard" onclick="flip()">
+    <div class="fc-front" id="ff"></div>
+    <div class="fc-back" id="fb"></div>
+  </div>
+  <p class="fc-hint">Tap the card to reveal the answer</p>
+  <div class="fc-nav">
+    <button class="btn btn-sm" onclick="fn(-1)">← Previous</button>
+    <button class="btn btn-teal btn-sm" onclick="fn(1)">Next →</button>
+  </div>
+</div>
+
+<!-- PAPERS LIST -->
+<div id="sp" class="screen">
+  <button class="back-btn" onclick="show('sm')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Menu</button>
+  <h2 class="page-title">Past exam papers</h2>
+  <p style="font-size:13px;color:var(--warm-muted);margin-bottom:1rem;">Real YMBA Colombo exam questions. Tap any paper to practise.</p>
+  <div id="plist"></div>
+</div>
+
+<!-- PAPER DETAIL -->
+<div id="spd" class="screen">
+  <button class="back-btn" onclick="show('sp')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Past papers</button>
+  <div id="pdc"></div>
+</div>
+
+<!-- EXPLAIN -->
+<div id="se" class="screen">
+  <button class="back-btn" onclick="show('st')"><i class="ti ti-arrow-left" aria-hidden="true"></i> Topics</button>
+  <div id="ec"></div>
+  <div class="loading-wrap" id="eload" style="display:none;"><span class="dots">Loading explanation</span></div>
+</div>
+
+</main>
+
+<script>
+const API = 'https://api.anthropic.com/v1/messages';
+  const AKEY = 'PASTE_YOUR_KEY_HERE';
+let lvl='jp1', lvlName='Junior Part I', chatH=[], qScore=0, qCount=0, qAns=false, fcIdx=0, fcFlip=false;
+
+const CUR = {
+  jp1:{name:'Junior Part I',
+    noteSections:[
+      {h:'Written Notes',items:['Note 1 — Tripitaka: The Three Baskets + 7 Abhidhamma books (Dhammasaṅgaṇī, Vibhaṅga, Dhātukathā, Puggalapaññatti, Kathāvatthu, Yamaka, Paṭṭhāna)','Note 2 — Absolute Truth (Paramattha Sacca) vs Conventional Truth (Sammuti Sacca)','Note 3 — 31 Planes of Existence: 11 Kāma + 16 Rūpa + 4 Arūpa','Note 4 — Consciousness (Citta): 89 types — Akusala 12, Ahetuka 18, Kāma-Sobhana 24, Rūpāvacara 15, Arūpāvacara 12, Lokuttara 8','Note 5 — Special Knowledge: 4 stages of sainthood and fetters eliminated at each'],v:false},
+      {h:'Video Tutorials',items:['Video 1 — Introduction to Abhidhamma: 4 Paramatta Dhamma, why study Abhidhamma','Video 2 — Planes of Existence: the 31 planes in detail','Video 3 — Consciousness: classification and types of citta'],v:true},
+      {h:'Past Papers Available',items:['YMBA Junior I — Dhamma & Abhidhamma 2022','YMBA Junior I — Dhamma & Abhidhamma 2023','YMBA Junior I — Dhamma & Abhidhamma 2024'],paper:true}
+    ],
+    topics:[{n:'4 Paramatta Dhamma',i:'ti-diamond',q:'The 4 Ultimate Realities: Citta, Cetasika, Rūpa, Nibbāna — JP1 Note 2'},{n:'Sammuti vs Paramattha',i:'ti-eye',q:'Absolute Truth vs Conventional Truth — JP1 Note 2'},{n:'31 Planes',i:'ti-layers',q:'31 Planes of Existence: Kāma, Rūpa, Arūpa — JP1 Note 3'},{n:'12 Akusala Cittas',i:'ti-alert-triangle',q:'12 Akusala Cittas: 8 Lobhamūla, 2 Dosamūla, 2 Mohamūla — JP1 Note 4'},{n:'18 Ahetuka Cittas',i:'ti-minus-circle',q:'18 Ahetuka rootless cittas — JP1 Note 4'},{n:'24 Kāma-Sobhana',i:'ti-sun',q:'24 Kāma-Sobhana Cittas: 8 Kusala, 8 Vipāka, 8 Kriyā — JP1 Note 4'},{n:'Lokuttara (8)',i:'ti-star',q:'8 Lokuttara Cittas: 4 Magga + 4 Phala — JP1 Note 4'},{n:'4 Stages Sainthood',i:'ti-award',q:'Sotāpanna, Sakadāgāmī, Anāgāmī, Arahant — JP1 Note 5'},{n:'7 Abhidhamma Books',i:'ti-books',q:'The 7 books of Abhidhamma Piṭaka — JP1 Note 1'}],
+    qs:['What are the 7 books of Abhidhamma Piṭaka? (Note 1)','Explain Paramattha vs Sammuti Sacca (Note 2)','Describe the 31 planes (Note 3)','How are the 12 Akusala Cittas classified? (Note 4)','What are the 4 stages of sainthood? (Note 5)'],
+    ctx:'JP1 Notes: (1) Tripitaka+7 books (2) Sammuti vs Paramattha (3) 31 planes (4) 89 cittas: Akusala 12, Ahetuka 18, Sobhana 24, Rūpāvacara 15, Arūpāvacara 12, Lokuttara 8 (5) 4 stages of sainthood.'},
+  jp2:{name:'Junior Part II',
+    noteSections:[
+      {h:'Written Notes',items:['Note 1 — Mental Factors (Cetasika) — Analogy: how cetasikas relate to citta','Note 2 — 52 Cetasikas overview: Aññasamāna 13 (7 universal + 6 particular), Akusala 14, Sobhana 25','Note 3 — 14 Akusala and 25 Sobhana cetasikas in detail with Pāli names','Note 4 — Analysis (Saṅgahanaya): for each citta, which cetasikas arise with it','Note 5 — Synthesis (Sampayoganaya): for each cetasika, which cittas it can be found in','Note 6 — Nibbāna: definition, qualities, aspects — the 4th Paramatta Dhamma'],v:false},
+      {h:'Past Papers Available',items:['YMBA Junior II — Abhidhamma 2022','YMBA Junior II — Dhamma & Abhidhamma 2023','YMBA Junior II — Dhamma & Abhidhamma 2024'],paper:true}
+    ],
+    topics:[{n:'52 Cetasikas',i:'ti-heart',q:'52 Cetasikas: 13 Aññasamāna, 14 Akusala, 25 Sobhana — JP2 Note 2'},{n:'7 Universal',i:'ti-infinity',q:'7 universal cetasikas: Phassa, Vedanā, Saññā, Cetanā, Ekaggatā, Jīvitindriya, Manasikāra — Note 2'},{n:'14 Akusala Cetasika',i:'ti-x-circle',q:'14 Akusala cetasikas: 4 common + Lobha group + Dosa group + Thīna/Middha + Vicikicchā — Note 3'},{n:'25 Sobhana Cetasika',i:'ti-sparkles',q:'25 Sobhana cetasikas: 19 common + 3 Virati + 2 Appamaññā + 1 Paññā — Note 3'},{n:'Saṅgahanaya',i:'ti-grid',q:'Saṅgahanaya: composition of each citta — JP2 Note 4'},{n:'Sampayoganaya',i:'ti-arrows-right-left',q:'Sampayoganaya: for each cetasika which cittas — JP2 Note 5'},{n:'Nibbāna',i:'ti-flame-off',q:'Nibbāna: definition, qualities, aspects — JP2 Note 6'}],
+    qs:['What are the 7 universal cetasikas? (Note 2)','List the 14 Akusala cetasikas (Note 3)','Explain Saṅgahanaya (Note 4)','Explain Sampayoganaya (Note 5)','What is Nibbāna in Abhidhamma? (Note 6)'],
+    ctx:'JP2 Notes: (1) Cetasika analogy (2) 52 Cetasikas: Aññasamāna 13, Akusala 14, Sobhana 25 (3) 14 Akusala + 25 Sobhana in detail (4) Saṅgahanaya (5) Sampayoganaya (6) Nibbāna.'},
+  sp1:{name:'Senior Part I',
+    noteSections:[
+      {h:'Compendium of the Miscellaneous (Pakiṇṇaka)',items:['Note 1 — Feelings (Vedanā): classification of citta by 5 types of vedanā','Note 2 — Roots (Hetu): tihetuka, dvihetuka, ahetuka classification','Note 3 — Thought Series: introduction to Vīthi (cognitive process)','Note 4 — Functions (Kicca): 14 functions performed by cittas'],v:false},
+      {h:'Element of Matter (Rūpa)',items:['Note 5 — Rūpa Samuddesa: overview of 28 types of Rūpa','Note 6 — Rūpa Vibhāga: 8 categories of Rūpa classification','Note 7 — Further classification of Rūpa (gross/subtle, internal/external, etc.)','Note 8 — Rūpa Samutthāna: 4 conditions — Kamma, Citta, Utu, Āhāra','Note 9 — Rūpa Kalāpa: material groups — Kammaja 9, Cittaja 6, Utuja 4, Āhāraja 2','Note 10 — Rūpa Pavattikkamo: occurrence in different planes, times and beings'],v:false},
+      {h:'Video Tutorials',items:['Video 7 — Compendium of the Miscellaneous: Feelings (Vedanā)','Video 8 — Compendium of the Miscellaneous: Roots (Hetu)','Video 9 — Compendium of the Miscellaneous: Functions (Kicca)','Video 10 & 11 — Element of Matter (Rūpa overview)','Video 12 — Origination of Matter (Rūpa Samutthāna)','Video 13 — Grouping of Material Phenomena (Rūpa Kalāpa)'],v:true},
+      {h:'Past Papers Available',items:['YMBA Senior 1 — Dhamma & Abhidhamma 2022','YMBA Senior 1 — Dhamma & Abhidhamma 2023','YMBA Senior 1 — Dhamma & Abhidhamma 2024'],paper:true}
+    ],
+    topics:[{n:'Note 1: Citta by Vedanā',i:'ti-mood-smile',q:'Classification of citta by Vedanā: 5 types of feeling — SP1 Note 1'},{n:'Note 2: Citta by Hetu',i:'ti-git-branch',q:'Classification of citta by Hetu: tihetuka, dvihetuka, ahetuka — SP1 Note 2'},{n:'Note 4: 14 Kicca',i:'ti-tool',q:'14 functions (Kicca) of citta — SP1 Note 4'},{n:'Notes 5-6: 28 Rūpa',i:'ti-circle',q:'28 types of Rūpa: 4 Mahābhūta + 24 Upādāya, 8 categories — SP1 Notes 5-6'},{n:'Note 8: 4 Origins',i:'ti-flame',q:'4 origins of Rūpa (Rūpa Samutthāna): Kamma, Citta, Utu, Āhāra — SP1 Note 8'},{n:'Note 9: Rūpa Kalāpa',i:'ti-atom',q:'Material groups (Rūpa Kalāpa): Kammaja 9, Cittaja 6, Utuja 4, Āhāraja 2 — SP1 Note 9'},{n:'Note 10: Pavattikkamo',i:'ti-world',q:'Occurrence of Rūpa in different planes and beings — SP1 Note 10'}],
+    qs:['How are cittas classified by Vedanā? (Note 1)','What is the difference between tihetuka and dvihetuka? (Note 2)','Name the 14 Kicca (functions of citta) (Note 4)','Explain the 28 types of Rūpa (Notes 5-6)','What are the 4 origins of Rūpa? (Note 8)','Describe the Rūpa Kalāpa groups (Note 9)'],
+    ctx:'SP1 Notes: (1) Vedanā 5 types (2) Hetu: tihetuka/dvihetuka/ahetuka (3) Intro Vīthi (4) 14 Kicca (5) 28 Rūpa overview (6) Rūpa Vibhāga 8 categories (7) Further Rūpa classification (8) Rūpa Samutthāna 4 conditions (9) Rūpa Kalāpa 4 groups (10) Rūpa Pavattikkamo. Videos 7-13.'},
+  sp2:{name:'Senior Part II',
+    noteSections:[
+      {h:'Doors & Bases',items:['Note 1 — Doors (Dvāra): 6 sense doors + door-freed consciousness (Dvāravimutta)','Note 3 — Bases (Vatthu): 6 physical bases including heart-base (hadaya-vatthu)'],v:false},
+      {h:'Five-sense-door Vīthi',items:['Note 4 — Five-sense-door Thought Series: full 17-moment sequence + 4 object strengths'],v:false},
+      {h:'Mind-door Vīthi',items:['Note 5 — Mind-door Process Part 1: Mano-dvāra-āvajjana, Javana sequence','Note 6 — Mind-door Process Part 2: consequent and independent processes','Note 7 — Mind-door Process Part 3: Appanā Javana (jhāna and supramundane)'],v:false},
+      {h:'Javana & Analysis',items:['Note 8 — Procedure of Javana: Kāma Javana (×7), Appanā Javana (×1), Mahaggata Javana','Note 9 — Analysis by Planes (Bhūmi Bheda): which Vīthi arise in Kāma/Rūpa/Arūpa planes','Note 10 — Analysis by Individuals (Puggala Bheda): Vīthi available to worldlings, Sotāpanna, Arahant'],v:false},
+      {h:'Special Processes',items:['Note 11 — Process-freed (Vīthimutta): Paṭisandhi, Bhavaṅga, Cuti','Note 12 — Death Proximate Vīthi (Maraṇāsanna): 3 signs, Javana ×5, 5-door & mind-door variants'],v:false},
+      {h:'Past Papers Available',items:['YMBA Senior 2 — Dhamma & Abhidhamma 2022','YMBA Senior 2 — Dhamma & Abhidhamma 2023','YMBA Senior 2 — Dhamma & Abhidhamma 2024'],paper:true}
+    ],
+    topics:[{n:'Note 1: 6 Doors',i:'ti-door',q:'6 sense doors and Dvāravimutta — SP2 Note 1'},{n:'Note 3: 6 Bases',i:'ti-layout',q:'6 physical bases (Vatthu) of consciousness — SP2 Note 3'},{n:'Note 4: 5-door Vīthi',i:'ti-timeline',q:'Full 17-moment Eye-door Vīthi and 4 object strengths — SP2 Note 4'},{n:'Notes 5-7: Mind-door',i:'ti-brain',q:'Mind-door Vīthi: consequent/independent, Appanā Javana — SP2 Notes 5-7'},{n:'Note 8: Javana',i:'ti-player-play',q:'Javana procedure: Kāma ×7, Appanā ×1, Mahaggata — SP2 Note 8'},{n:'Note 9: Bhūmi Bheda',i:'ti-layers',q:'Analysis by planes of existence — SP2 Note 9'},{n:'Note 10: Puggala Bheda',i:'ti-users',q:'Analysis by individuals — SP2 Note 10'},{n:'Note 11: Vīthimutta',i:'ti-arrows-off',q:'Process-freed: Paṭisandhi, Bhavaṅga, Cuti — SP2 Note 11'},{n:'Note 12: Death Vīthi',i:'ti-moon',q:'Death-proximate Vīthi: 3 signs, Javana ×5 — SP2 Note 12'}],
+    qs:['Explain Eye-door Vīthi step by step (Note 4)','Difference between 5-door and Mind-door Vīthi?','Explain Javana types and procedure (Note 8)','Which Vīthi arise in the Rūpa plane? (Note 9)','What is Vīthimutta? (Note 11)','Explain the Death-proximate Vīthi (Note 12)'],
+    ctx:'SP2 Notes 1-12: (1) 6 Doors+Dvāravimutta (3) 6 Bases (4) 5-door Vīthi 17 moments+4 object strengths (5-7) Mind-door Vīthi+Appanā Javana (8) Javana: Kāma×7/Appanā×1/Mahaggata (9) Bhūmi Bheda by plane (10) Puggala Bheda by individual (11) Vīthimutta: Paṭisandhi/Bhavaṅga/Cuti (12) Maraṇāsanna: 3 signs+Javana×5.'},
+  diploma:{name:'Diploma',
+    noteSections:[
+      {h:'From Past Papers 2022–2025',items:['2022: Sakadāgāmī Magga Vīthi · 24 Paṭṭhāna conditions · Kilesa · 4-fold Kamma · Lobha/Diṭṭhi in Akusala Saṅgahaya · Pāli grammar','2023: Bodhipakkhiya-dhamma · Pañcakkhandha + Upādānakkhandha · Paṭṭhāna conditions · Death-proximate Vīthi · Rūpakkhandha · Pāli grammar','2024: Akusala Saṅgahaya · Saṃyojana (fetters) · Noble Eightfold Path · Paṭṭhāna conditions · Paticcasamuppāda · Pāli grammar','2025: "Sabbe saṅkhārā aniccāti" + Paramatta Dhammas · Bodhipakkhiya · "Cetanāhaṃ kammaṃ vadāmi" · 4 modes of Rūpa · Paṭṭhāna naya'],v:false}
+    ],
+    topics:[{n:'24 Paṭṭhāna',i:'ti-link',q:'24 Paṭṭhāna conditions — all names and key ones explained'},{n:'Paticcasamuppāda',i:'ti-rotate-clockwise',q:'Dependent Origination: 12 links from Avijjā to Jarāmaraṇa'},{n:'Kilesa & Saṃyojana',i:'ti-cloud',q:'10 Kilesa (defilements) and 10 Saṃyojana (fetters)'},{n:'4-fold Kamma',i:'ti-repeat',q:'Four-fold classification of Kamma: Janaka, Upatthambhaka, Upapīḷaka, Upaghātaka'},{n:'Bodhipakkhiya',i:'ti-flower',q:'37 Factors of Enlightenment (Bodhipakkhiya-dhamma): 7 groups'},{n:'Noble Eightfold Path',i:'ti-road',q:'Noble Eightfold Path from the Abhidhamma perspective'},{n:'Pañcakkhandha',i:'ti-stack',q:'5 Aggregates and 5 Aggregates of Clinging (Upādānakkhandha)'}],
+    qs:['Name the 24 Paṭṭhāna conditions','Explain Sakadāgāmī Magga Citta Vīthi (2022 Q1)','What are the 10 Kilesa?','Explain Paticcasamuppāda 12 links','How does Abhidhamma classify the Noble Eightfold Path? (2024 Q3)'],
+    ctx:'Diploma past papers: 2022 (Sakadāgāmī Vīthi, 24 Paṭṭhāna, Kilesa, Kamma), 2023 (Bodhipakkhiya, Pañcakkhandha, Paṭṭhāna, Death Vīthi), 2024 (Akusala Saṅgahaya, Saṃyojana, Noble Eightfold Path, Paticcasamuppāda), 2025 (Sabbe saṅkhārā aniccāti, Cetanā=Kamma, 4 modes Rūpa, Paṭṭhāna naya).'},
+  adv:{name:'Advanced Diploma',
+    noteSections:[
+      {h:'From Past Papers 2022 & 2025',items:['2022: Upādinna Trika · Puggalapaññatti Trikamāṭikā · Satta Bojjhaṅga (Vibhaṅga) · Catuppaṭisambhidā · Adhipati Paccayo (Paṭṭhāna) · 22 Indriya (Dhātukathā) · 24 conditions by Trivatta','2025: 7 Abhidhamma texts (Sattapakaraṇa) · Vibhaṅga & Paṭṭhāna · Sutta vs Abhidhamma Piṭaka · Hetu/Ārammaṇa/Adhipati Paccayo · 4 groups of Dhammasaṅgaṇī · Viññāṇa paccayā nāmarūpaṃ in Paṭisandhi · Sakavāda vs Paravāda'],v:false}
+    ],
+    topics:[{n:'7 Abhidhamma Texts',i:'ti-books',q:'Sattapakaraṇa: 7 Abhidhamma books — Vibhaṅga and Paṭṭhāna in detail (Adv 2025 Q1)'},{n:'Dhammasaṅgaṇī',i:'ti-list-numbers',q:'4 main groups of Dhammasaṅgaṇī Prakaraṇaya (Adv 2025 Q5)'},{n:'Vibhaṅga',i:'ti-analyze',q:'Vibhaṅga: Satta Bojjhaṅga and Catuppaṭisambhidā (Adv 2022 Q3 & Q4)'},{n:'Paṭṭhāna Advanced',i:'ti-link',q:'Adhipati Paccayo + 24 conditions by Trivatta (Adv 2022 Q5 & Q7)'},{n:'Dhātukathā',i:'ti-atom',q:'22 Indriya in Saṅgaha and Asaṅgaha — Dhātukathā (Adv 2022 Q6)'},{n:'Puggalapaññatti',i:'ti-users',q:'Trikamāṭikā of Puggalapaññatti (Adv 2022 Q2)'},{n:'Sakavāda & Paravāda',i:'ti-scale',q:'Sakavāda and Paravāda in Kathāvatthu (Adv 2025 Q7)'}],
+    qs:['Name the 7 Abhidhamma books and describe Vibhaṅga and Paṭṭhāna (2025 Q1)','Explain Adhipati Paccayo in detail (2022 Q5)','What are the 4 groups of Dhammasaṅgaṇī? (2025 Q5)','Explain Sakavāda vs Paravāda (2025 Q7)'],
+    ctx:'Adv Diploma: 2022 (Upādinna Trika, Puggalapaññatti, Satta Bojjhaṅga, Catuppaṭisambhidā, Adhipati Paccayo, 22 Indriya, Trivatta), 2025 (7 books, Vibhaṅga+Paṭṭhāna, Sutta vs Abhidhamma, Dhammasaṅgaṇī 4 groups, Viññāṇa paccayā nāmarūpaṃ, Sakavāda vs Paravāda).'}
+};
+
+const PAPERS=[
+  {id:'jp1-24',l:'jp1',label:'Junior Part I 2024',y:'2024',mcq:[{q:'How many books in Abhidhamma Piṭaka?',o:['Five','Six','Seven','Eight'],a:2},{q:'The 4 Paramatta Dhamma are:',o:['Citta, Cetasika, Rūpa, Kamma','Citta, Cetasika, Rūpa, Nibbāna','Citta, Saññā, Vedanā, Nibbāna','Lobha, Dosa, Moha, Paññā'],a:1},{q:'How many Akusala Cittas?',o:['8','10','12','14'],a:2},{q:'Kathāvatthu compiled by:',o:['Ven. Ānanda','Ven. Mahā Kassapa','Ven. Moggaliputta Tissa','Ven. Sāriputta'],a:2}],essay:['Explain Paramattha Sacca and Sammuti Sacca (Note 2)','Enumerate 4 Paramatta Dhamma with numbers in each','Classify 12 Akusala Cittas by root (hetu) with Pāli terms','Name 4 stages of sainthood and fetters eliminated at each (Note 5)']},
+  {id:'jp1-23',l:'jp1',label:'Junior Part I 2023',y:'2023',mcq:[{q:'How many planes of existence?',o:['27','31','33','36'],a:1},{q:'Commentary on Dhammasaṅgaṇī:',o:['Sammohavinodanī','Atthasālinī','Vibhāvinī','Mūlaṭīkā'],a:1},{q:'Ahetuka cittas total:',o:['12','15','18','21'],a:2}],essay:['Describe the 31 Planes of Existence (Note 3)','Name all 7 Abhidhamma books (Note 1)','Explain 18 Ahetuka Cittas in 3 groups (Note 4)','How is Lobhamūla citta divided into 8 types? (Note 4)']},
+  {id:'jp2-24',l:'jp2',label:'Junior Part II 2024',y:'2024',mcq:[{q:'Cetasikas total:',o:['48','50','52','54'],a:2},{q:'Universal cetasikas number:',o:['6','7','8','9'],a:1},{q:'Which cetasika constitutes kamma?',o:['Saññā','Vedanā','Cetanā','Phassa'],a:2}],essay:['Name and explain the 7 universal cetasikas (Note 2)','Classify all 52 Cetasikas in 3 groups (Note 2)','Explain Nibbāna: definition, qualities and aspects (Note 6)','What is Saṅgahanaya? Illustrate with Lobhamūla cittas (Note 4)']},
+  {id:'sp1-23',l:'sp1',label:'Senior Part I 2023',y:'2023',mcq:[{q:'How many types of Rūpa?',o:['24','26','28','30'],a:2},{q:'The 4 Mahābhūta are:',o:['Earth, Water, Fire, Wind','Earth, Water, Space, Wind','Earth, Fire, Space, Wind','Water, Fire, Space, Wind'],a:0},{q:'How many types of vedanā?',o:['2','3','4','5'],a:3}],essay:['Classify cittas by Vedanā (Note 1)','Name and explain the 14 Kicca (Note 4)','Classify 28 Rūpa into 8 categories (Note 6)','Describe 4 conditions for Rūpa origination (Note 8)','What are Rūpa Kalāpa? Describe 4 types (Note 9)']},
+  {id:'sp2-key',l:'sp2',label:'Senior Part II — Key exam topics',y:'2022–2024',mcq:[{q:'In Eye-door Vīthi, Javana arises how many times?',o:['5','6','7','8'],a:2},{q:'Bhavaṅga is:',o:['Adverting consciousness','Life-continuum consciousness','Rebirth-linking consciousness','Smile-producing consciousness'],a:1},{q:'Process-freed (Vīthimutta) cittas include:',o:['Javana only','Paṭisandhi, Bhavaṅga, Cuti','Tadārammaṇa and Voṭṭhapana','All Lokuttara cittas'],a:1}],essay:['Full Eye-door Vīthi (17 moments) and 4 object strengths (Note 4)','Javana: types and procedure (Note 8)','Bhūmi Bheda: which Vīthi in Kāma, Rūpa, Arūpa planes (Note 9)','Puggala Bheda: worldling vs Arahant Vīthi (Note 10)','Vīthimutta: Paṭisandhi, Bhavaṅga, Cuti (Note 11)','Death-proximate Vīthi and 3 signs at death (Note 12)']},
+  {id:'dip-25',l:'diploma',label:'Diploma 2025',y:'2025 ✨',mcq:[],essay:['Q1. "Sabbe saṅkhārā aniccāti" — explain with Paramattha Dhammas','Q2. Enumerate Bodhipakkhiyadhamma and explain two','Q3. "Cetanāhaṃ bhikkhave kammaṃ vadāmi" — illustrate with citta & cetasika','Q4. Clarify 4 modes of origin of material phenomena','Q5. Describe Paṭṭhāna naya (conditional relations)','Q6. Short notes: Pañcakkhandha · Ārammaṇa Paccayo · Atthi Paccayo · Dvādasa āyatana · Noble Eightfold Path · Paticcasamuppāda']},
+  {id:'dip-24',l:'diploma',label:'Diploma 2024',y:'2024',mcq:[],essay:['Q1. Enumerate Akusala Saṅgahaya with details','Q2. Saṃyojana: Suttanta and Abhidhamma methods','Q3. Noble Eightfold Path from Abhidhamma perspective','Q4. Explain one: Ārammaṇa / Samanantara / Paccājāta paccayo','Q5. Short notes (×4): Hetu paccayo · Vedanākkhandha · Pañca bala · Satipaṭṭhāna · Moha · Kilesa','Q6. Paticcasamuppāda']},
+  {id:'dip-23',l:'diploma',label:'Diploma 2023',y:'2023',mcq:[],essay:['Q1. Bodhipakkhiya-dhamma + one subgroup','Q2. Pañcakkhandha and Upādānakkhandha','Q3. One condition: Adhipati / Āsevana / Āhāra Paccayo','Q4. Death-proximate Vīthi — both ways with diagram','Q5. Short notes (×4): Upādāna · Nīvaraṇa · Jhānaṅga · Javana · Kammaja Rūpa · Paññā','Q6. Rūpakkhandha + 4 conditions of Rūpa']},
+  {id:'dip-22',l:'diploma',label:'Diploma 2022',y:'2022',mcq:[],essay:['Q1. Sakadāgāmī Magga Citta Vīthi — thought moments and functions','Q2. 24 Paṭṭhāna conditions + note on Atthi Paccayo','Q3. Lobha and Diṭṭhi in Akusala Saṅgahaya','Q4. Kilesa — indicate all and brief note on each','Q5. Short notes (×4): Upādāna · Sabbacittasādhāraṇa · Kasiṇa · Saṃyojana · Sakkāyadiṭṭhi','Q6. Four-fold Kamma']},
+  {id:'adv-25',l:'adv',label:'Advanced Diploma 2025',y:'2025 ✨',mcq:[],essay:['Q1. Name Sattapakaraṇa and illustrate Vibhaṅga and Paṭṭhāna','Q2. Difference between Sutta Piṭaka and Abhidhamma Piṭaka','Q3. Clarify "Abhidhamma Piṭaka" and share thoughts on it','Q4. Hetu paccaya + Ārammaṇa Paccayo + Adhipati Paccayo','Q5. 4 main groups of Dhammasaṅgaṇī + brief explanation','Q6. Viññāṇa paccayā nāmarūpaṃ in three groups of Paṭisandhi','Q7. Sakavāda and Paravāda']},
+  {id:'adv-22',l:'adv',label:'Advanced Diploma 2022',y:'2022',mcq:[],essay:['Q1. Upādinna (Clinging) Trika — dhamma in each group','Q2. Trikamāṭikā of Puggalapaññatti — total + explain 3','Q3. Satta Bojjhaṅga according to Vibhaṅga Prakaraṇaya','Q4. Catuppaṭisambhidā according to Vibhaṅga Prakaraṇaya','Q5. Adhipati Paccayo in Paṭṭhāna Prakaraṇaya — full details','Q6. 22 Indriya in Saṅgaha/Asaṅgaha — Dhātukathā','Q7. 24 Conditions by Trivatta (Past/Present/Future)']}
+];
+
+const CARDS=[
+  {f:'JP1 Note 1: 7 Abhidhamma Books',b:'(1) Dhammasaṅgaṇī (2) Vibhaṅga (3) Dhātukathā (4) Puggalapaññatti (5) Kathāvatthu — compiled by Moggaliputta Tissa at 3rd Council (6) Yamaka (7) Paṭṭhāna'},
+  {f:'JP1 Note 2: Sammuti vs Paramattha',b:'Sammuti Sacca = Conventional Truth: persons, tables — change with designation. Paramattha Sacca = Absolute Truth: cittas, cetasikas, rūpa, nibbāna — never change in own nature.'},
+  {f:'JP1 Note 3: 31 Planes of Existence',b:'11 Kāma planes (4 woeful + human + 6 deva) + 16 Rūpa planes (15 jhāna + Asaññāsatta) + 4 Arūpa planes = 31 total.'},
+  {f:'JP1 Note 4: 89 Cittas',b:'Kāmāvacara 54 (Akusala 12 + Ahetuka 18 + Sobhana 24) + Rūpāvacara 15 + Arūpāvacara 12 + Lokuttara 8 = 89.'},
+  {f:'JP1 Note 4: 8 Lobhamūla Cittas',b:'Feeling (somanassa/upekkhā) × Diṭṭhi (sampayutta/vippayutta) × Promptitude (asaṅkhārika/sasaṅkhārika) = 2×2×2 = 8.'},
+  {f:'JP1 Note 5: 4 Stages of Sainthood',b:'Sotāpanna: eliminates 3 fetters. Sakadāgāmī: weakens 2 more. Anāgāmī: eliminates 5 total (adds kāmacchanda, byāpāda). Arahant: eliminates all 10 fetters.'},
+  {f:'JP2 Note 2: 52 Cetasikas',b:'Aññasamāna 13 (7 universal + 6 particular) + Akusala 14 + Sobhana 25 = 52. All arise depending on citta.'},
+  {f:'JP2 Note 2: 7 Universal Cetasikas',b:'Phassa · Vedanā · Saññā · Cetanā · Ekaggatā · Jīvitindriya · Manasikāra. Arise with every single citta.'},
+  {f:'JP2 Note 3: 14 Akusala Cetasikas',b:'4 common to all akusala: Moha, Ahirika, Anottappa, Uddhacca. + Lobha group: Lobha, Diṭṭhi, Māna. + Dosa group: Dosa, Issā, Macchariya, Kukkucca. + Thīna, Middha. + Vicikicchā.'},
+  {f:'JP2 Note 4 & 5: Saṅgaha vs Sampayoga',b:'Saṅgahanaya: for each citta — which cetasikas arise with it (composition). Sampayoganaya: for each cetasika — which cittas contain it (presence).'},
+  {f:'JP2 Note 6: Nibbāna',b:'Unconditioned (asaṅkhata). Two aspects: Sa-upādisesa Nibbāna (with remainder — Arahant alive) and Anupādisesa Nibbāna (without remainder — at Parinibbāna).'},
+  {f:'SP1 Note 1: 5 types of Vedanā',b:'Somanassa (pleasant mental) · Domanassa (unpleasant mental) · Upekkhā (neutral) · Sukha (pleasant bodily — body-consciousness only) · Dukkha (unpleasant bodily — body-consciousness only).'},
+  {f:'SP1 Note 4: 14 Kicca (Functions)',b:'Paṭisandhi · Bhavaṅga · Āvajjana · Dassana · Savana · Ghāyana · Sāyana · Phusana · Sampaṭicchana · Santīraṇa · Voṭṭhapana · Javana · Tadārammaṇa · Cuti = 14 functions.'},
+  {f:'SP1 Note 8: 4 Origins of Rūpa',b:'Kammaja Rūpa (born of kamma) · Cittaja Rūpa (born of consciousness) · Utuja Rūpa (born of temperature) · Āhāraja Rūpa (born of nutrition). All 4 arise in Kāma planes.'},
+  {f:'SP1 Note 9: Rūpa Kalāpa groups',b:'Kammaja: 9 types · Cittaja: 6 types · Utuja: 4 types · Āhāraja: 2 types = 21 total material groups.'},
+  {f:'SP2 Note 4: 17-moment Eye-door Vīthi',b:'Atīta-bhavaṅga → Bhavaṅga-calana → Bhavaṅga-upaccheda → Pañcadvāra-āvajjana → Cakkhu-viññāṇa → Sampaṭicchana → Santīraṇa → Voṭṭhapana → Javana ×7 → Tadārammaṇa ×2.'},
+  {f:'SP2 Note 8: Three types of Javana',b:'Kāma Javana: arises ×7, wholesome or unwholesome. Appanā Javana: arises ×1 (extended) for jhāna, Magga, Phala. Mahaggata Javana: in Rūpa/Arūpa planes. At death: only ×5.'},
+  {f:'SP2 Note 9: Bhūmi Bheda',b:'Kāma plane: all Vīthi possible. Rūpa plane: mind-door only (no 5-door except limited). Arūpa plane: mind-door only. Asaññāsatta: no citta at all — Rūpa only.'},
+  {f:'SP2 Note 11: Vīthimutta (Process-freed)',b:'Paṭisandhi (rebirth-linking, 1st moment) · Bhavaṅga (life-continuum, passive flow) · Cuti (death, last moment). All three use the same type of citta within one existence.'},
+  {f:'SP2 Note 12: Death-proximate Vīthi',b:'3 signs: Kamma (deed done) · Kamma-nimitta (symbol of deed) · Gati-nimitta (symbol of destination). Javana ×5 (not ×7). Then Cuti → Paṭisandhi in new life.'},
+  {f:'Diploma 2022: 24 Paṭṭhāna',b:'Hetu · Ārammaṇa · Adhipati · Anantara · Samanantara · Sahajāta · Aññamañña · Nissaya · Upanissaya · Purejāta · Pacchājāta · Āsevana · Kamma · Vipāka · Āhāra · Indriya · Jhāna · Magga · Sampayutta · Vippayutta · Atthi · Natthi · Vigata · Avigata.'},
+  {f:'Diploma 2025: "Cetanāhaṃ kammaṃ vadāmi"',b:'"Monks, I declare volition (cetanā) to be kamma." Cetanā is the 4th universal cetasika — it is the kamma-producing factor in Javana. Asked in Diploma 2025 Q3.'},
+  {f:'Adv 2025: Sakavāda vs Paravāda',b:'Sakavāda = own doctrine (Theravāda positions). Paravāda = opponent\'s doctrine. The structure of Kathāvatthu: each topic states Sakavāda then refutes Paravāda. Advanced Diploma 2025 Q7.'}
+];
+
+function go(l,n){
+  lvl=l;lvlName=n;
+  document.getElementById('menu-title').textContent=n;
+  document.getElementById('sn-tag').textContent=n;
+  document.getElementById('level-pill').style.display='block';
+  renderNotes();renderTopics();renderPapers();show('sm');
+}
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function renderNotes(){
+  const c=CUR[lvl];const el=document.getElementById('nlist');el.innerHTML='';
+  c.noteSections.forEach(sec=>{
+    const hdr=document.createElement('p');hdr.className='section-header';hdr.textContent=sec.header;el.appendChild(hdr);
+    sec.items.forEach(n=>{
+      if(sec.paper){const d=document.createElement('p');d.className='paper-item';d.textContent=n;el.appendChild(d);return}
+      const b=document.createElement('button');b.className='note-btn'+(sec.v?' video':'');
+      b.innerHTML=`<i class="ti ${sec.v?'ti-video':'ti-file-text'}" style="margin-right:8px;" aria-hidden="true"></i>${n}`;
+      b.onclick=()=>{startTutor();document.getElementById('cin').value='Explain this from my ADD School notes: '+n;send()};
+      el.appendChild(b);
+    });
+  });
+}
+
+function renderTopics(){
+  const c=CUR[lvl];const el=document.getElementById('tgrid');el.innerHTML='';
+  c.topics.forEach(t=>{
+    const b=document.createElement('button');b.className='topic-btn';
+    b.innerHTML=`<span class="ticon"><i class="ti ${t.i}" aria-hidden="true"></i></span><span class="tname">${t.n}</span>`;
+    b.onclick=()=>exp(t.q,t.n);el.appendChild(b);
+  });
+}
+
+function renderPapers(){
+  const el=document.getElementById('plist');el.innerHTML='';
+  const mine=PAPERS.filter(p=>p.l===lvl);
+  const rest=PAPERS.filter(p=>p.l!==lvl);
+  if(mine.length){const h=document.createElement('p');h.style.cssText='font-size:12px;font-weight:600;color:var(--warm-muted);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.04em;';h.textContent='Your level';el.appendChild(h)}
+  [...mine,...rest].forEach((p,i)=>{
+    if(i===mine.length&&rest.length){const h=document.createElement('p');h.style.cssText='font-size:12px;font-weight:600;color:var(--warm-muted);margin:.75rem 0 .5rem;text-transform:uppercase;letter-spacing:.04em;';h.textContent='Other levels';el.appendChild(h)}
+    const n=(p.mcq||[]).length+(p.essay||[]).length;
+    const d=document.createElement('div');d.className='paper-card';d.onclick=()=>showPaper(p);
+    d.innerHTML=`<i class="ti ti-file-text" style="color:var(--amber);font-size:18px;" aria-hidden="true"></i><div style="flex:1"><p class="pname">${p.label}</p><p class="pyear">${p.y} · ${n} questions</p></div><i class="ti ti-chevron-right" style="color:var(--warm-muted);font-size:16px;" aria-hidden="true"></i>`;
+    el.appendChild(d);
+  });
+}
+
+function showPaper(p){
+  show('spd');const c=document.getElementById('pdc');
+  let h=`<h2 style="font-family:'Noto Serif',serif;font-size:20px;font-weight:600;color:var(--teal);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);">${p.label}</h2>`;
+  if((p.mcq||[]).length){
+    h+=`<h3 style="font-size:14px;font-weight:600;color:var(--warm-muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:.75rem;">Multiple Choice</h3>`;
+    p.mcq.forEach((q,i)=>{h+=`<div class="pq"><strong>Q${i+1}.</strong> ${q.q}<br><span style="font-size:12px;color:var(--warm-muted);">${q.o.map((o,j)=>String.fromCharCode(97+j)+') '+o).join(' · ')}</span></div>`});
+  }
+  if((p.essay||[]).length){
+    h+=`<h3 style="font-size:14px;font-weight:600;color:var(--warm-muted);text-transform:uppercase;letter-spacing:.04em;margin:1rem 0 .75rem;">Essay Questions</h3>`;
+    p.essay.forEach(q=>{h+=`<div class="pq">${q}</div>`});
+  }
+  h+=`<div class="practise-btns">`;
+  (p.essay||[]).slice(0,4).forEach((q,i)=>{h+=`<button class="btn btn-teal btn-sm" onclick="practise('${p.id}',${i})">Practise Q${i+1} ↗</button>`});
+  h+=`</div>`;
+  c.innerHTML=h;
+}
+
+function practise(id,qi){
+  const p=PAPERS.find(x=>x.id===id);if(!p)return;
+  startTutor();
+  document.getElementById('cin').value=`Help me answer this YMBA ${p.label} question: "${(p.essay||[])[qi]}"`;
+  send();
+}
+
+function startTutor(){
+  chatH=[];document.getElementById('msgs').innerHTML='';
+  const qEl=document.getElementById('qqs');qEl.innerHTML='';
+  (CUR[lvl].qs||[]).forEach(q=>{
+    const b=document.createElement('button');b.className='q-pill';b.textContent=q;b.onclick=()=>qk(q);qEl.appendChild(b);
+  });
+  addMsg('ai',`Sādhu! 🙏 I'm your ADD School Abhidhamma tutor for the ${lvlName} level. I know all your class notes and past papers. What would you like to study?`);
+  show('sc');
+}
+
+function addMsg(r,t){
+  const d=document.createElement('div');d.className='msg msg-'+r;d.textContent=t;
+  const m=document.getElementById('msgs');m.appendChild(d);m.scrollTop=m.scrollHeight;
+}
+function qk(q){document.getElementById('cin').value=q;send()}
+
+async function send(){
+  const inp=document.getElementById('cin');const q=inp.value.trim();if(!q)return;
+  inp.value='';addMsg('user',q);chatH.push({role:'user',content:q});
+  const t=document.createElement('div');t.className='msg msg-ai dots';t.textContent='Thinking';
+  document.getElementById('msgs').appendChild(t);document.getElementById('msgs').scrollTop=9999;
+  const noteCtx=CUR[lvl].ctx||'';
+  const li={jp1:'Translate all Pāli terms. Focus on 4 Paramatta, 89 cittas, 31 planes. Reference JP1 note numbers 1-5.',jp2:'Cover 52 Cetasikas, Saṅgahanaya, Sampayoganaya, Nibbāna. Reference JP2 note numbers 1-6.',sp1:'Cover 28 Rūpa, Vedanā/Hetu/Kicca, Rūpa Kalāpa. Reference SP1 note numbers 1-10.',sp2:'Use Pāli throughout. Reference SP2 note numbers 1-12 specifically.',diploma:'Advanced Pāli. Reference which year Diploma paper each topic appeared in.',adv:'Advanced Pāli. Reference Vibhaṅga, Dhātukathā, Paṭṭhāna texts and which paper year.'}[lvl]||'';
+  try{
+    const r=await fetch('https://corsproxy.io/?url=https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':AKEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:`You are the YMBA Abhidhamma tutor for Athula Dassana Dhamma School (ADD School), Heathrow UK (addschool.org), guided by Venerable Wanduramba Kassapa Thero. Textbooks: (1) Fundamental Abhidhamma by Dr. Nandamālābhivaṃsa (2) Abhidhammattha Saṅgaha by Nārada Mahā Thera. The student is studying ${lvlName}. ADD School notes: ${noteCtx} ${li} Keep answers 4-6 sentences unless asked for more. Be warm, precise and encouraging. End with a brief follow-up question or encouragement.`,messages:chatH})});
+    const data=await r.json();t.remove();
+    const reply=data.content?.[0]?.text||'Connection issue. Please try again.';
+    chatH.push({role:'assistant',content:reply});addMsg('ai',reply);
+  }catch(e){t.remove();addMsg('ai','Connection issue. Please check your internet and try again.')}
+}
+
+let curQ=null;
+async function startQuiz(){
+  qScore=0;qCount=0;
+  document.getElementById('qsc').textContent='Score: 0';
+  show('sq');nextQ();
+}
+
+async function nextQ(){
+  ['qfb','qnext'].forEach(id=>{document.getElementById(id).style.display='none'});
+  document.getElementById('qcard').style.display='none';document.getElementById('qload').style.display='block';
+  qAns=false;qCount++;document.getElementById('qprog').textContent='Question '+qCount;
+  const real=PAPERS.filter(p=>p.l===lvl).flatMap(p=>(p.mcq||[]));
+  if(real.length>0&&Math.random()<0.45){
+    const q=real[Math.floor(Math.random()*real.length)];
+    curQ={question:q.q,options:q.o.map((o,i)=>String.fromCharCode(65+i)+'. '+o),answer:q.a,explanation:'Correct: '+q.o[q.a],source:'ADD School YMBA past paper'};
+    renderQ();return;
+  }
+  const tc={jp1:'Tripitaka 7 books, 31 planes, 89 cittas (Akusala 12/Ahetuka 18/Sobhana 24/Rūpāvacara 15/Arūpāvacara 12/Lokuttara 8), 4 stages of sainthood',jp2:'52 Cetasikas (Aññasamāna 13/Akusala 14/Sobhana 25), Saṅgahanaya, Sampayoganaya, Nibbāna',sp1:'28 Rūpa, Vedanā 5 types, 14 Kicca, Rūpa Vibhāga 8 categories, 4 origins Rūpa, Rūpa Kalāpa 4 groups',sp2:'6 Doors, 17-moment Eye-door Vīthi, Mind-door Vīthi, Javana types, Bhūmi Bheda, Puggala Bheda, Vīthimutta, Death Vīthi',diploma:'24 Paṭṭhāna, Kilesa 10, Kamma 4-fold, Paticcasamuppāda, Bodhipakkhiya, Noble Eightfold Path, Saṃyojana',adv:'7 Abhidhamma texts, Dhammasaṅgaṇī 4 groups, Vibhaṅga, Adhipati Paccayo, Dhātukathā 22 Indriya, Puggalapaññatti'}[lvl]||'';
+  try{
+    const r=await fetch('https://corsproxy.io/?url=https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':AKEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:'You generate YMBA Abhidhamma MCQs for ADD School Heathrow. ONLY valid JSON, no markdown, no backticks.',messages:[{role:'user',content:`Generate a YMBA-style Abhidhamma MCQ for ${lvlName}. Key topics: ${tc}. Return ONLY: {"question":"...","options":["A. ...","B. ...","C. ...","D. ..."],"answer":0,"explanation":"...","source":"ADD School ${lvlName} notes"} where answer is 0-3.`}]})});
+    const data=await r.json();
+    curQ=JSON.parse(data.content?.[0]?.text?.trim()||'{}');
+    renderQ();
+  }catch(e){
+    document.getElementById('qload').style.display='none';
+    document.getElementById('qcard').style.display='block';
+    document.getElementById('qq').textContent='Could not load question. Please try again.';
+    document.getElementById('qnext').style.display='inline-block';
+  }
+}
+
+function renderQ(){
+  document.getElementById('qload').style.display='none';
+  document.getElementById('qcard').style.display='block';
+  document.getElementById('qsrc').textContent=curQ.source||'';
+  document.getElementById('qq').textContent=curQ.question;
+  const opts=document.getElementById('qopts');opts.innerHTML='';
+  curQ.options.forEach((o,i)=>{
+    const b=document.createElement('button');b.className='quiz-opt';b.textContent=o;
+    b.onclick=()=>ansQ(i,b);opts.appendChild(b);
+  });
+}
+
+function ansQ(i,btn){
+  if(qAns)return;qAns=true;
+  document.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const fb=document.getElementById('qfb');
+  if(i===curQ.answer){
+    btn.classList.add('correct');qScore++;
+    document.getElementById('qsc').textContent='Score: '+qScore;
+    fb.textContent='✓ Correct! '+curQ.explanation;
+    fb.className='quiz-fb correct';
+  }else{
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[curQ.answer].classList.add('correct');
+    fb.textContent='✗ '+curQ.explanation;
+    fb.className='quiz-fb wrong';
+  }
+  fb.style.display='block';
+  document.getElementById('qnext').style.display='inline-block';
+}
+
+function startFlash(){fcIdx=0;fcFlip=false;show('sf');renderCard()}
+function renderCard(){
+  const c=CARDS[fcIdx];
+  document.getElementById('ff').textContent=c.f;
+  document.getElementById('fb').textContent=c.b;
+  document.getElementById('fprog').textContent=(fcIdx+1)+' / '+CARDS.length;
+  document.getElementById('fcard').classList.remove('flipped');fcFlip=false;
+}
+function flip(){fcFlip=!fcFlip;document.getElementById('fcard').classList.toggle('flipped',fcFlip)}
+function fn(d){fcIdx=(fcIdx+d+CARDS.length)%CARDS.length;renderCard()}
+
+async function exp(topic,name){
+  show('se');document.getElementById('ec').innerHTML='';document.getElementById('eload').style.display='block';
+  const noteRef={jp1:'Reference which JP1 note (1-5) or video tutorial each point comes from.',jp2:'Reference which JP2 note (1-6) each point comes from.',sp1:'Reference which SP1 note (1-10) or video tutorial (7-13) each point comes from.',sp2:'Reference which SP2 note (1-12) each point comes from.',diploma:'Reference which year Diploma paper this topic appeared in.',adv:'Reference which year Advanced Diploma paper and Abhidhamma text.'}[lvl]||'';
+  try{
+    const r=await fetch('https://corsproxy.io/?url=https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':AKEY,'anthropic-version':'2023-06-01'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:900,system:`You are an Abhidhamma teacher at ADD School Heathrow teaching ${lvlName}. Textbooks: Fundamental Abhidhamma (Dr. Nandamālābhivaṃsa) and Abhidhammattha Saṅgaha (Nārada Mahā Thera). ${noteRef} Write 4-5 paragraphs: clear, exam-focused, with Pāli terms and specific numbers. Be warm.`,messages:[{role:'user',content:'Explain for ADD School YMBA student: '+topic}]})});
+    const data=await r.json();const text=data.content?.[0]?.text||'Could not load.';
+    document.getElementById('eload').style.display='none';
+    const c=document.getElementById('ec');
+    c.innerHTML=`<h2 style="font-family:'Noto Serif',serif;font-size:20px;font-weight:600;color:var(--teal);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);">${name}</h2><div class="explain-body"></div>`;
+    text.split('\n\n').forEach(para=>{if(para.trim()){const p=document.createElement('p');p.textContent=para.trim();c.querySelector('.explain-body').appendChild(p)}});
+    const btn=document.createElement('button');btn.className='btn btn-teal';btn.style.marginTop='.5rem';btn.textContent='Ask tutor more →';btn.onclick=()=>{startTutor();document.getElementById('cin').value='Tell me more about '+name;send()};c.querySelector('.explain-body').appendChild(btn);
+  }catch(e){document.getElementById('eload').style.display='none';document.getElementById('ec').innerHTML='<p style="color:var(--warm-muted)">Could not load. Please check your connection.</p>'}
+}
+</script>
+</body>
+</html>
